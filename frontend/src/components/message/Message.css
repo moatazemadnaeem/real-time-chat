@@ -1,0 +1,41 @@
+.message {
+  display: flex;
+  margin: 1rem;
+  align-items: center;
+}
+.logo {
+  width: 25px;
+  height: 25px;
+  order: 1;
+}
+.logo img {
+  width: 100%;
+}
+.message-content {
+  padding: 1rem;
+  border-radius: 20px;
+  margin-left: 0.5rem;
+  max-width: 300px;
+  background-color: rgb(0, 21, 41);
+  order: 2;
+  font-weight: bold;
+}
+.right {
+  justify-content: flex-end;
+}
+.logo-right {
+  order: 2;
+}
+.message-content-right {
+  order: 1;
+  margin-right: 0.5rem;
+  background-color: #1677ff;
+}
+.timeContainer {
+  font-size: 10px;
+  margin-top: 1rem;
+}
+.name-top {
+  margin-bottom: 0.5rem;
+  font-size: 10px;
+}
