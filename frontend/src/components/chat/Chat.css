@@ -10,7 +10,7 @@
 }
 .chat .header {
   font-size: 1rem;
-  color: white;
+  color: var(--penColor);
   padding: 0 30px;
   display: flex;
   justify-content: space-between;
@@ -36,14 +36,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(0, 21, 41);
+  background-color: var(--mainColor);
 }
 .send-container .input {
   width: 90%;
   margin-right: 1rem;
 }
 .select-user {
-  color: rgb(0, 21, 41);
+  color: var(--mainColor);
   display: flex;
   align-items: center;
   justify-content: center;

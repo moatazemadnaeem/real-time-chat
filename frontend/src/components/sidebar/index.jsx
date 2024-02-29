@@ -98,8 +98,8 @@ function SideBar({ collapsed, setOption, option }) {
               </div>
               <Menu
                 onSelect={handleMenuSelect}
-                className="menu"
                 theme="dark"
+                className="menu"
                 items={filteredChats.map((chat, indx) => {
                   return {
                     key: chat._id,

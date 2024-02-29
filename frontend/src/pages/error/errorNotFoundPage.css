@@ -9,7 +9,7 @@
   font-weight: bold;
 }
 .status {
-  color: #c70039;
+  color: var(--errorColor);
 }
 .mr {
   margin-top: 0.5rem;

@@ -9,7 +9,7 @@
   margin: 0 auto;
 }
 .signin .ant-form-item-label label {
-  color: white;
+  color: var(--penColor);
   font-weight: bold;
 }
 .signin .name,
@@ -25,6 +25,6 @@
   width: 100%;
 }
 .link a {
-  color: #ffc300;
+  color: var(--secondaryColor);
   font-weight: bold;
 }

@@ -9,17 +9,17 @@ function Message({ text, current, option }) {
 
   const getDate = () => {
     const handleshowtime = (s, m, h, d) => {
-      if (m < 1) {
-        return `${s.toFixed(2)} seconds `;
-      }
-      if (m > 1 && m < 60) {
-        return `${m.toFixed(2)} minutes `;
+      if (h >= 24) {
+        return `${d.toFixed(2)} days `;
       }
       if (m >= 60) {
         return `${h.toFixed(2)} hours `;
       }
-      if (h >= 24) {
-        return `${d.toFixed(2)} days `;
+      if (m > 1 && m < 60) {
+        return `${m.toFixed(2)} minutes `;
+      }
+      if (m < 1) {
+        return `${s.toFixed(2)} seconds `;
       }
     };
     if (text && text.createdAt) {
