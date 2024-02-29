@@ -1,4 +1,4 @@
-import { Layout, Input, Menu, message, Spin, Modal } from "antd";
+import { Layout, Input, Menu, message, Spin } from "antd";
 import "./Sider.css";
 import { useEffect, useState, useContext } from "react";
 import { AxiosInstance } from "../../axiosConfig/AxiosConfig";

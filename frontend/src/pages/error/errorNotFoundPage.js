@@ -1,9 +1,5 @@
-import { useRouteError } from "react-router-dom";
 import "./errorNotFoundPage.css";
 export default function ErrorNotFoundPage() {
-  const error = useRouteError();
-  console.error(error);
-
   return (
     <div id="error-not-found-page">
       <h1 className="header mr">Oops!</h1>

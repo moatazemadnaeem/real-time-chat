@@ -2,15 +2,20 @@ import React, { useState } from "react";
 import { Form, Input, Button, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import "./SignUp.css";
-import { AxiosInstance } from "../../axiosConfig/AxiosConfig";
+import { authApiCall } from "../../services/api/authApi";
+import {
+  validateName,
+  validateEmail,
+  validatePassword,
+} from "../../utils/validations";
 const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const onFinish = async (values) => {
+  const handleSignUpApi = async (values) => {
     setLoading(true);
     try {
-      const user = await AxiosInstance.post("users/signup", values);
+      const user = await authApiCall("signup", values);
       setLoading(false);
       if (user) {
         return navigate("/signin");
@@ -23,39 +28,12 @@ const SignUp = () => {
     }
   };
 
-  const validateName = (_, value) => {
-    if (!value || value.length < 3 || value.length > 255) {
-      return Promise.reject(
-        new Error("Name must be between 3 and 255 characters")
-      );
-    }
-    return Promise.resolve();
-  };
-
-  const validateEmail = (_, value) => {
-    // Email regex pattern
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!value || !emailRegex.test(value)) {
-      return Promise.reject(new Error("Invalid email address"));
-    }
-    return Promise.resolve();
-  };
-
-  const validatePassword = (_, value) => {
-    if (!value || value.length < 6 || value.length > 255) {
-      return Promise.reject(
-        new Error("Password must be between 6 and 255 characters")
-      );
-    }
-    return Promise.resolve();
-  };
-
   return (
     <Form
       className="signup"
       name="signup_form"
       layout="vertical"
-      onFinish={onFinish}
+      onFinish={handleSignUpApi}
     >
       <Form.Item
         className="name"

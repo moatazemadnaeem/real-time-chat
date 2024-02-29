@@ -3,48 +3,9 @@ import "./Message.css";
 import avatar from "../../assets/avatar.jpeg";
 import blueAvatar from "../../assets/blue_avatar.png";
 import { AppContext } from "../../store/appStore/appState";
-
+import { getDate } from "../../utils/formatting";
 function Message({ text, current, option }) {
   const user = useContext(AppContext);
-
-  const getDate = () => {
-    const handleshowtime = (s, m, h, d) => {
-      if (h >= 24) {
-        return `${d.toFixed(2)} days `;
-      }
-      if (m >= 60) {
-        return `${h.toFixed(2)} hours `;
-      }
-      if (m > 1 && m < 60) {
-        return `${m.toFixed(2)} minutes `;
-      }
-      if (m < 1) {
-        return `${s.toFixed(2)} seconds `;
-      }
-    };
-    if (text && text.createdAt) {
-      const currentTime = new Date();
-      const messageTime = new Date(text.createdAt);
-      const timeDifference = currentTime - messageTime;
-      const secondsAgo = timeDifference / 1000;
-      const mintuesAgo = timeDifference / (1000 * 60);
-      const hoursAgo = timeDifference / (1000 * 60 * 60);
-      const daysAgo = timeDifference / (1000 * 60 * 60 * 24);
-      return (
-        <div className="timeContainer">
-          <span>
-            {handleshowtime(secondsAgo, mintuesAgo, hoursAgo, daysAgo)}
-            ago
-          </span>
-        </div>
-      );
-    }
-    return (
-      <div className="timeContainer">
-        <span>No Time</span>
-      </div>
-    );
-  };
   const getName = () => {
     const id = user.id;
     const senderId = text.senderId;
@@ -90,14 +51,21 @@ function Message({ text, current, option }) {
         )}
       </div>
       <div className={`message-content ${current && "message-content-right"}`}>
-        {/* name of the user */}
         {getName()}
-        {/* msg */}
         <p>{text.msg}</p>
-        {/* time the chat is created */}
-        {getDate()}
+        {text ? (
+          <div className="timeContainer">
+            <span>
+              {getDate(text)}
+              ago
+            </span>
+          </div>
+        ) : (
+          <div className="timeContainer">
+            <span>No Time</span>
+          </div>
+        )}
       </div>
-      {/* time */}
     </div>
   );
 }
