@@ -1,7 +1,6 @@
 import { Layout, Input, Menu, message, Spin } from "antd";
 import "./Sider.css";
 import { useEffect, useState, useContext } from "react";
-import { AxiosInstance } from "../../axiosConfig/AxiosConfig";
 import { TeamOutlined, UserOutlined, UserAddOutlined } from "@ant-design/icons";
 import ChatModal from "./chatModal";
 import { useNavigate } from "react-router-dom";

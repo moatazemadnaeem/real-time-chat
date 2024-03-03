@@ -9,7 +9,6 @@ import "./Chat.css";
 import Messages from "../messages";
 import { AppContext } from "../../store/appStore/appState";
 import { SocketContext } from "../../store/socketStore/socketState";
-import { AxiosInstance } from "../../axiosConfig/AxiosConfig";
 import { useNavigate } from "react-router-dom";
 import { chatApi } from "../../services/api/chatApi";
 const { Header, Content } = Layout;

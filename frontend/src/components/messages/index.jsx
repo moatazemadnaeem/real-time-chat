@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
 import "./Messages.css";
 import Message from "../message";
-import { AxiosInstance } from "../../axiosConfig/AxiosConfig";
 import { message } from "antd";
 import { AppContext } from "../../store/appStore/appState";
 import { SocketContext } from "../../store/socketStore/socketState";
