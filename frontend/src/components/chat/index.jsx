@@ -40,7 +40,7 @@ function Chat({ collapsed, toggleCollapsed, option }) {
         return navigate("/signin", { replace: true });
       }
       return message.error(
-        error?.response?.data?.msg || "Something went wrong please try again"
+        error?.response?.data?.msg || "Something went wrong please try again."
       );
     } finally {
       setLoading(false);

@@ -19,7 +19,7 @@ const SignIn = () => {
     } catch (error) {
       setLoading(false);
       return message.error(
-        error?.message || "Something went wrong please try again"
+        error?.message || "Something went wrong please try again."
       );
     }
   };
