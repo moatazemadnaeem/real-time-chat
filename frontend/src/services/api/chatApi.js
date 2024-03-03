@@ -9,7 +9,7 @@ export const chatApi=async(url='',method='',requestBody={},chatId='')=>{
         return data;
     } catch (error) {
         throw(
-            error?.response || "Something went wrong please try again"
+            error?.response || "Something went wrong please try again."
         );
     }
 } 

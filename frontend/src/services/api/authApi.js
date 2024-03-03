@@ -8,7 +8,7 @@ export const authApiCall = async (url, bodyData) => {
   } catch (error) {
     console.log(error)
     throw new Error(
-      error?.response?.data?.msg || "Something went wrong please try again"
+      error?.response?.data?.msg || "Something went wrong please try again."
     );
   }
 };

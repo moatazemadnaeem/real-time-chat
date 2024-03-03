@@ -30,7 +30,7 @@ function Messages({ option, lastMsg }) {
           return navigate("/signin", { replace: true });
         }
         return message.error(
-          error?.data?.msg || "Something went wrong please try again"
+          error?.data?.msg || "Something went wrong please try again."
         );
       }
     };

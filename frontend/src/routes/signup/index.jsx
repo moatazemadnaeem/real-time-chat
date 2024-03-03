@@ -23,7 +23,7 @@ const SignUp = () => {
     } catch (error) {
       setLoading(false);
       return message.error(
-        error?.response?.data?.msg || "Something went wrong please try again"
+        error?.response?.data?.msg || "Something went wrong please try again."
       );
     }
   };
