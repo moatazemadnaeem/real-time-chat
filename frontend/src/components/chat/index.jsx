@@ -11,7 +11,7 @@ import { AppContext } from "../../store/appStore/appState";
 import { SocketContext } from "../../store/socketStore/socketState";
 import { AxiosInstance } from "../../axiosConfig/AxiosConfig";
 import { useNavigate } from "react-router-dom";
-
+import { chatApi } from "../../services/api/chatApi";
 const { Header, Content } = Layout;
 
 function Chat({ collapsed, toggleCollapsed, option }) {
@@ -20,13 +20,10 @@ function Chat({ collapsed, toggleCollapsed, option }) {
   const navigate = useNavigate();
   const { user } = useContext(AppContext);
   const { socket } = useContext(SocketContext);
-  const onFinish = async (values) => {
+  const handleSendingMsg = async (values) => {
     try {
       setLoading(true);
-      const { data } = await AxiosInstance.post("chat/send-msg", {
-        ...values,
-        chatId: option.key,
-      });
+      const  data  = await chatApi("send-msg","post",values,option.key);
       socket.emit("message", {
         msg: values.msg,
         chatId: option.key,
@@ -35,12 +32,12 @@ function Chat({ collapsed, toggleCollapsed, option }) {
       });
       setLastMsg(data?.text?.msg || null);
     } catch (error) {
-      if (error?.response?.status === 401) {
+      if (error?.status === 401) {
         socket.close();
         return navigate("/signin", { replace: true });
       }
       return message.error(
-        error?.response?.data?.msg || "Something went wrong please try again"
+        error?.data?.msg || "Something went wrong please try again"
       );
     } finally {
       setLoading(false);
@@ -78,7 +75,7 @@ function Chat({ collapsed, toggleCollapsed, option }) {
           ) : (
             <>
               <Messages option={option} lastMsg={lastMsg} />
-              <Form className="send-container" onFinish={onFinish}>
+              <Form className="send-container" onFinish={handleSendingMsg}>
                 <Form.Item
                   name="msg"
                   className="input"

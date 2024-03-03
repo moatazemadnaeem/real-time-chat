@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { SocketContext } from "../../store/socketStore/socketState";
 import { AppContext } from "../../store/appStore/appState";
 import OnlineUsers from "./onlineUsers";
+import { chatApi } from "../../services/api/chatApi";
 const { Sider } = Layout;
 const { Search } = Input;
 function SideBar({ collapsed, setOption, option }) {
@@ -26,15 +27,15 @@ function SideBar({ collapsed, setOption, option }) {
   const fetchChatsByUser = async () => {
     try {
       setLoading(true);
-      const { data } = await AxiosInstance.get("chat/get-chats-by-user");
+      const  data  = await chatApi("get-chats-by-user","get");
       setChats(data.chats);
     } catch (error) {
-      if (error?.response?.status === 401) {
+      if (error?.status === 401) {
         socket.close();
         return navigate("/signin", { replace: true });
       }
       return message.error(
-        error?.response?.data?.msg || "Something went wrong please try again"
+        error?.data?.msg || "Something went wrong please try again"
       );
     } finally {
       setLoading(false);

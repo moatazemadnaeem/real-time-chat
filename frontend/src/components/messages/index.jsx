@@ -6,6 +6,7 @@ import { message } from "antd";
 import { AppContext } from "../../store/appStore/appState";
 import { SocketContext } from "../../store/socketStore/socketState";
 import { useNavigate } from "react-router-dom";
+import { chatApi } from "../../services/api/chatApi";
 function Messages({ option, lastMsg }) {
   const [messages, setMessages] = useState([]);
   const { user } = useContext(AppContext);
@@ -21,17 +22,15 @@ function Messages({ option, lastMsg }) {
   useEffect(() => {
     const fetchMessagesByChat = async () => {
       try {
-        const { data } = await AxiosInstance.post("chat/get-messages-by-chat", {
-          chatId: option.key,
-        });
+        const  data  = await chatApi("get-messages-by-chat", "post",{},option.key);
         setMessages(data.messages);
       } catch (error) {
-        if (error?.response?.status === 401) {
+        if (error?.status === 401) {
           socket.close();
           return navigate("/signin", { replace: true });
         }
         return message.error(
-          error?.response?.data?.msg || "Something went wrong please try again"
+          error?.data?.msg || "Something went wrong please try again"
         );
       }
     };

@@ -10,7 +10,6 @@ const chatSchema = mongoose.Schema(
     chatName: {
       type: String,
       required: true,
-      unique: true,
     },
     chatCreatorName: {
       type: String,

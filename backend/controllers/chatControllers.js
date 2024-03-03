@@ -21,21 +21,15 @@ module.exports = {
         }
       }
       if (!isGroup) {
-        const exists = await chat.findOne({
-          isGroup: false,
-          usersInChat: { $in: usersInChat[0] },
-        });
+        const exists = await chat.findOne({$or:[{userId,isGroup: false,usersInChat: { $in: usersInChat[0] }},{userId: usersInChat[0] ,isGroup: false,usersInChat: { $in: userId }}]});
         if (exists) {
           throw new BadReqErr("this person is aleardy you are chating with");
         }
       }
       if (isGroup) {
-        const chatNameExists = await chat.findOne({
-          isGroup: true,
-          chatName,
-        });
+        const chatNameExists = await chat.findOne({userId, isGroup: true, chatName });
         if (chatNameExists) {
-          throw new BadReqErr("chatName must be unique!");
+          throw new BadReqErr("Group Name must be unique!");
         }
       }
       const User = await user.findById(userId);
