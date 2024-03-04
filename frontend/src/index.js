@@ -15,11 +15,11 @@ import ProtectRoute from "./routes/ProtectRoute";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/">
-      <Route index element={<SignUp />} />
+      <Route index element={<SignIn />} />  
       <Route path="private" element={<ProtectRoute />}>
         <Route path="home" element={<Home />} />
       </Route>
-      <Route path="signin" element={<SignIn />} />
+      <Route path="signup" element={<SignUp />} />
       <Route path="*" element={<ErrorNotFoundPage />} />
     </Route>
   )

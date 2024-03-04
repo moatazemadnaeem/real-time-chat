@@ -87,7 +87,7 @@ const SignUp = () => {
       </Form.Item>
       <Form.Item className="link">
         <span>Already Have An Account? </span>
-        <Link to="/signin">SignIn</Link>
+        <Link to="/">SignIn</Link>
       </Form.Item>
       <Form.Item className="button">
         <Button loading={loading} type="primary" htmlType="submit">

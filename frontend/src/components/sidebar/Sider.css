@@ -7,10 +7,19 @@
   margin: 1rem auto;
 }
 .menu {
-  max-height: 80%;
+  max-height:50%;
   overflow-y: scroll;
 }
+/* Hide scrollbar for Chrome, Safari and Opera */
+.menu::-webkit-scrollbar {
+  display: none;
+}
 
+/* Hide scrollbar for IE, Edge and Firefox */
+.menu {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
 .user-icon-status {
   position: relative;
   padding: 2px;
