@@ -11,14 +11,16 @@ import { AppContext } from "../../store/appStore/appState";
 import { SocketContext } from "../../store/socketStore/socketState";
 import { useNavigate } from "react-router-dom";
 import { chatApi } from "../../services/api/chatApi";
+import { HomeContext } from "../../store/homeStore/appStore/homeState";
 const { Header, Content } = Layout;
 
-function Chat({ collapsed, toggleCollapsed, option }) {
+function Chat({ collapsed, toggleCollapsed }) {
   const [loading, setLoading] = useState(false);
   const [lastMsg, setLastMsg] = useState(null);
   const navigate = useNavigate();
   const { user } = useContext(AppContext);
   const { socket } = useContext(SocketContext);
+  const {option}=useContext(HomeContext)
   const handleSendingMsg = async (values) => {
     try {
       setLoading(true);

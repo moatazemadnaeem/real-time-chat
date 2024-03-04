@@ -8,9 +8,10 @@ import { SocketContext } from "../../store/socketStore/socketState";
 import { AppContext } from "../../store/appStore/appState";
 import OnlineUsers from "./onlineUsers";
 import { chatApi } from "../../services/api/chatApi";
+import { HomeContext } from "../../store/homeStore/appStore/homeState";
 const { Sider } = Layout;
 const { Search } = Input;
-function SideBar({ collapsed, setOption, option }) {
+function SideBar({ collapsed }) {
   const navigate = useNavigate();
   const [chats, setChats] = useState([]);
   const [modalGroupOnlineUsers, setModalGroupOnlineUsers] = useState(false);
@@ -20,6 +21,7 @@ function SideBar({ collapsed, setOption, option }) {
   const [searchText, setSearchText] = useState("");
   const { socket } = useContext(SocketContext);
   const { user } = useContext(AppContext);
+  const {option,setOption}=useContext(HomeContext)
   const showModal = () => {
     setIsModalOpen(true);
   };
