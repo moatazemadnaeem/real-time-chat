@@ -1,15 +1,15 @@
 import { Modal, Form, Select, Switch, Button, message, Input } from "antd";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { AxiosInstance } from "../../axiosConfig/AxiosConfig";
 import { useNavigate } from "react-router-dom";
-import { SocketContext } from "../../store/socketStore/socketState";
 import { chatApi } from "../../services/api/chatApi";
+import { useSelector } from "react-redux";
 function ChatModal({ isModalOpen, setIsModalOpen }) {
   const [isGroup, setIsGroup] = useState(false);
   const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate();
-  const { socket } = useContext(SocketContext);
+  const { socket } = useSelector((state) => state.socket);
   const [form] = Form.useForm();
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -41,7 +41,7 @@ function ChatModal({ isModalOpen, setIsModalOpen }) {
     } catch (error) {
       if (error?.response?.status === 401) {
         socket.close();
-        return navigate("/signin", { replace: true });
+        return navigate("/", { replace: true });
       }
       message.error(
         error?.response?.data?.msg || "Something went wrong please try again."
@@ -55,12 +55,12 @@ function ChatModal({ isModalOpen, setIsModalOpen }) {
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      const data = await chatApi("create-chat","post", values);
+      const data = await chatApi("create-chat", "post", values);
       message.success(data?.msg || "Done.");
     } catch (error) {
       if (error?.status === 401) {
         socket.close();
-        return navigate("/signin", { replace: true });
+        return navigate("/", { replace: true });
       }
       return message.error(
         error?.data?.msg || "Something went wrong please try again."

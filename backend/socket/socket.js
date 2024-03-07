@@ -45,11 +45,10 @@ io.use((socket, next) => {
 const onlineUsers = {};
 io.on("connection", (socket) => {
   let userId = handleSocketAuth(socket);
-  console.log(userId);
+  console.log("user connected", userId);
   if (userId) onlineUsers[userId] = userId;
   io.emit("onlineUsers", Object.keys(onlineUsers));
   socket.on("message", (data) => {
-    console.log(data);
     io.emit(data.chatId, data);
   });
   socket.on("disconnect", () => {

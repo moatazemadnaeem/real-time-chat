@@ -1,15 +1,13 @@
 import { Modal } from "antd";
-import React, { useContext } from "react";
-import { AppContext } from "../../store/appStore/appState";
-
+import React from "react";
+import { useSelector } from "react-redux";
 function OnlineUsers({
   chatSelected,
   modalGroupOnlineUsers,
   setModalGroupOnlineUsers,
   onlineUsers,
 }) {
-  const { user } = useContext(AppContext);
-  console.log("modalUsers", chatSelected, onlineUsers);
+  const { user } = useSelector((state) => state.user);
   let Users;
   if (chatSelected) {
     Users = [
@@ -29,7 +27,7 @@ function OnlineUsers({
       return Users.filter((userRecord) => userRecord._id !== user.id).map(
         (item, indx, array) => {
           return (
-            <div className={`user-modal`}>
+            <div key={item._id} className={`user-modal`}>
               <div
                 className={`modal-circle ${handleOnlineStatus(indx, array)}`}
               ></div>

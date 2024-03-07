@@ -4,36 +4,36 @@ import { useEffect, useState, useContext } from "react";
 import { TeamOutlined, UserOutlined, UserAddOutlined } from "@ant-design/icons";
 import ChatModal from "./chatModal";
 import { useNavigate } from "react-router-dom";
-import { SocketContext } from "../../store/socketStore/socketState";
-import { AppContext } from "../../store/appStore/appState";
 import OnlineUsers from "./onlineUsers";
 import { chatApi } from "../../services/api/chatApi";
-import { HomeContext } from "../../store/homeStore/appStore/homeState";
+import { useSelector, useDispatch } from "react-redux";
+import { set_user } from "../../redux/features/chat/createChatSlice";
 const { Sider } = Layout;
 const { Search } = Input;
 function SideBar({ collapsed }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [chats, setChats] = useState([]);
   const [modalGroupOnlineUsers, setModalGroupOnlineUsers] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const { socket } = useContext(SocketContext);
-  const { user } = useContext(AppContext);
-  const {option,setOption}=useContext(HomeContext)
+  const { socket } = useSelector((state) => state.socket);
+  const { user } = useSelector((state) => state.user);
+  const { selectionSider } = useSelector((state) => state.chat);
   const showModal = () => {
     setIsModalOpen(true);
   };
   const fetchChatsByUser = async () => {
     try {
       setLoading(true);
-      const  data  = await chatApi("get-chats-by-user","get");
+      const data = await chatApi("get-chats-by-user", "get");
       setChats(data.chats);
     } catch (error) {
       if (error?.status === 401) {
         socket.close();
-        return navigate("/signin", { replace: true });
+        return navigate("/", { replace: true });
       }
       return message.error(
         error?.data?.msg || "Something went wrong please try again."
@@ -54,18 +54,19 @@ function SideBar({ collapsed }) {
   }, [socket]);
   const handleMenuSelect = (item) => {
     const chat = chats.filter((chat) => chat._id === item.key)[0];
-    setOption({
-      key: item.key,
-      userId: chat.userId,
-      users: chat.usersInChat,
-      chatCreatorName: chat.chatCreatorName,
-      chatName: chat.chatName,
-    });
+    dispatch(
+      set_user({
+        key: item.key,
+        userId: chat.userId,
+        users: chat.usersInChat,
+        chatCreatorName: chat.chatCreatorName,
+        chatName: chat.chatName,
+      })
+    );
   };
   const filteredChats = chats.filter((chat) =>
     chat.chatName.toLowerCase().includes(searchText.toLowerCase())
   );
-  console.log(chats, onlineUsers);
   const handleOnlineStatus = (indx = 0) => {
     if (
       (user.id === chats[indx]?.userId &&
@@ -137,7 +138,7 @@ function SideBar({ collapsed }) {
           <OnlineUsers
             modalGroupOnlineUsers={modalGroupOnlineUsers}
             setModalGroupOnlineUsers={setModalGroupOnlineUsers}
-            chatSelected={option}
+            chatSelected={selectionSider}
             onlineUsers={onlineUsers}
           />
         </>

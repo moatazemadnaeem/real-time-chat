@@ -1,11 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import "./Message.css";
 import avatar from "../../assets/avatar.jpeg";
 import blueAvatar from "../../assets/blue_avatar.png";
-import { AppContext } from "../../store/appStore/appState";
 import { getDate } from "../../utils/formatting";
-function Message({ text, current, option }) {
-  const user = useContext(AppContext);
+import { useSelector } from "react-redux";
+function Message({ text, current }) {
+  const { user } = useSelector((state) => state.user);
+  const { selectionSider } = useSelector((state) => state.chat);
   const getName = () => {
     const id = user.id;
     const senderId = text.senderId;
@@ -16,19 +17,19 @@ function Message({ text, current, option }) {
         </div>
       );
     }
-    if (senderId === option.userId) {
+    if (senderId === selectionSider.userId) {
       return (
         <div className="name-top">
-          <span>{option.chatCreatorName}</span>
+          <span>{selectionSider.chatCreatorName}</span>
         </div>
       );
     }
-    if (option && option.users) {
-      for (let i = 0; i < option.users.length; i++) {
-        if (senderId === option.users[i]._id) {
+    if (selectionSider && selectionSider.users) {
+      for (let i = 0; i < selectionSider.users.length; i++) {
+        if (senderId === selectionSider.users[i]._id) {
           return (
             <div className="name-top">
-              <span>{option.users[i].name}</span>
+              <span>{selectionSider.users[i].name}</span>
             </div>
           );
         }

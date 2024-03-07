@@ -2,31 +2,35 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import "./Messages.css";
 import Message from "../message";
 import { message } from "antd";
-import { AppContext } from "../../store/appStore/appState";
-import { SocketContext } from "../../store/socketStore/socketState";
 import { useNavigate } from "react-router-dom";
 import { chatApi } from "../../services/api/chatApi";
-function Messages({ option, lastMsg }) {
+import { useSelector } from "react-redux";
+function Messages({ lastMsg }) {
   const [messages, setMessages] = useState([]);
-  const { user } = useContext(AppContext);
-  const { socket } = useContext(SocketContext);
+  const { user } = useSelector((state) => state.user);
+  const { socket } = useSelector((state) => state.socket);
+  const { selectionSider } = useSelector((state) => state.chat);
   const navigate = useNavigate();
   const bottomEl = useRef(null);
-  console.log(messages);
   useEffect(() => {
-    socket.on(option.key, (data) => {
+    socket.on(selectionSider.key, (data) => {
       setMessages((prev) => [...prev, data]);
     });
   }, []);
   useEffect(() => {
     const fetchMessagesByChat = async () => {
       try {
-        const  data  = await chatApi("get-messages-by-chat", "post",{},option.key);
+        const data = await chatApi(
+          "get-messages-by-chat",
+          "post",
+          {},
+          selectionSider.key
+        );
         setMessages(data.messages);
       } catch (error) {
         if (error?.status === 401) {
           socket.close();
-          return navigate("/signin", { replace: true });
+          return navigate("/", { replace: true });
         }
         return message.error(
           error?.data?.msg || "Something went wrong please try again."
@@ -34,7 +38,7 @@ function Messages({ option, lastMsg }) {
       }
     };
     fetchMessagesByChat();
-  }, [option, lastMsg]);
+  }, [selectionSider, lastMsg]);
   useEffect(() => {
     if (messages && messages.length > 0) {
       bottomEl?.current?.scrollIntoView({ behavior: "smooth" });
@@ -49,13 +53,13 @@ function Messages({ option, lastMsg }) {
         if (indx === arr.length - 1) {
           return (
             <div ref={bottomEl} key={msg._id}>
-              <Message option={option} text={msg} current={ownChat} />
+              <Message text={msg} current={ownChat} />
             </div>
           );
         }
         return (
           <div key={msg._id}>
-            <Message option={option} text={msg} current={ownChat} />
+            <Message text={msg} current={ownChat} />
           </div>
         );
       })}
