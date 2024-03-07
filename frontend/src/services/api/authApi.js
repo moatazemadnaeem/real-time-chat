@@ -6,7 +6,6 @@ export const authApiCall = async (url, bodyData) => {
       return user;
     }
   } catch (error) {
-    console.log(error)
     throw new Error(
       error?.response?.data?.msg || "Something went wrong please try again."
     );

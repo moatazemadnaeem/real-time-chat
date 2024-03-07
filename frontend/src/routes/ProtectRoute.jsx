@@ -2,7 +2,6 @@ import React from "react";
 import { useAuth } from "../customHooks/userAuth";
 import { Navigate, Outlet } from "react-router-dom";
 import { Spin } from "antd";
-import SocketContextProvider from "../store/socketStore";
 function ProtectRoute() {
   const { user, loading } = useAuth();
   if (!loading && !user) {

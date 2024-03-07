@@ -5,15 +5,15 @@ import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { chatApi } from "../../services/api/chatApi";
 import { useSelector } from "react-redux";
-function Messages({ option, lastMsg }) {
+function Messages({ lastMsg }) {
   const [messages, setMessages] = useState([]);
   const { user } = useSelector((state) => state.user);
   const { socket } = useSelector((state) => state.socket);
+  const { selectionSider } = useSelector((state) => state.chat);
   const navigate = useNavigate();
   const bottomEl = useRef(null);
-  console.log(messages);
   useEffect(() => {
-    socket.on(option.key, (data) => {
+    socket.on(selectionSider.key, (data) => {
       setMessages((prev) => [...prev, data]);
     });
   }, []);
@@ -24,7 +24,7 @@ function Messages({ option, lastMsg }) {
           "get-messages-by-chat",
           "post",
           {},
-          option.key
+          selectionSider.key
         );
         setMessages(data.messages);
       } catch (error) {
@@ -38,7 +38,7 @@ function Messages({ option, lastMsg }) {
       }
     };
     fetchMessagesByChat();
-  }, [option, lastMsg]);
+  }, [selectionSider, lastMsg]);
   useEffect(() => {
     if (messages && messages.length > 0) {
       bottomEl?.current?.scrollIntoView({ behavior: "smooth" });
@@ -53,13 +53,13 @@ function Messages({ option, lastMsg }) {
         if (indx === arr.length - 1) {
           return (
             <div ref={bottomEl} key={msg._id}>
-              <Message option={option} text={msg} current={ownChat} />
+              <Message text={msg} current={ownChat} />
             </div>
           );
         }
         return (
           <div key={msg._id}>
-            <Message option={option} text={msg} current={ownChat} />
+            <Message text={msg} current={ownChat} />
           </div>
         );
       })}

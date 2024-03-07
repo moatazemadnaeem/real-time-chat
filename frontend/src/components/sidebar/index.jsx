@@ -6,12 +6,13 @@ import ChatModal from "./chatModal";
 import { useNavigate } from "react-router-dom";
 import OnlineUsers from "./onlineUsers";
 import { chatApi } from "../../services/api/chatApi";
-import { HomeContext } from "../../store/homeStore/appStore/homeState";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { set_user } from "../../redux/features/chat/createChatSlice";
 const { Sider } = Layout;
 const { Search } = Input;
 function SideBar({ collapsed }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [chats, setChats] = useState([]);
   const [modalGroupOnlineUsers, setModalGroupOnlineUsers] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState([]);
@@ -20,7 +21,7 @@ function SideBar({ collapsed }) {
   const [searchText, setSearchText] = useState("");
   const { socket } = useSelector((state) => state.socket);
   const { user } = useSelector((state) => state.user);
-  const { option, setOption } = useContext(HomeContext);
+  const { selectionSider } = useSelector((state) => state.chat);
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -53,18 +54,19 @@ function SideBar({ collapsed }) {
   }, [socket]);
   const handleMenuSelect = (item) => {
     const chat = chats.filter((chat) => chat._id === item.key)[0];
-    setOption({
-      key: item.key,
-      userId: chat.userId,
-      users: chat.usersInChat,
-      chatCreatorName: chat.chatCreatorName,
-      chatName: chat.chatName,
-    });
+    dispatch(
+      set_user({
+        key: item.key,
+        userId: chat.userId,
+        users: chat.usersInChat,
+        chatCreatorName: chat.chatCreatorName,
+        chatName: chat.chatName,
+      })
+    );
   };
   const filteredChats = chats.filter((chat) =>
     chat.chatName.toLowerCase().includes(searchText.toLowerCase())
   );
-  console.log(chats, onlineUsers);
   const handleOnlineStatus = (indx = 0) => {
     if (
       (user.id === chats[indx]?.userId &&
@@ -136,7 +138,7 @@ function SideBar({ collapsed }) {
           <OnlineUsers
             modalGroupOnlineUsers={modalGroupOnlineUsers}
             setModalGroupOnlineUsers={setModalGroupOnlineUsers}
-            chatSelected={option}
+            chatSelected={selectionSider}
             onlineUsers={onlineUsers}
           />
         </>

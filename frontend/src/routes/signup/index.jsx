@@ -18,7 +18,7 @@ const SignUp = () => {
       const user = await authApiCall("signup", values);
       setLoading(false);
       if (user) {
-        return navigate("/signin");
+        return navigate("/");
       }
     } catch (error) {
       setLoading(false);

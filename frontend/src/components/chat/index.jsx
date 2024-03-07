@@ -9,7 +9,6 @@ import "./Chat.css";
 import Messages from "../messages";
 import { useNavigate } from "react-router-dom";
 import { chatApi } from "../../services/api/chatApi";
-import { HomeContext } from "../../store/homeStore/appStore/homeState";
 import { useSelector, useDispatch } from "react-redux";
 import { logout_user } from "../../redux/features/user/createUserSlice";
 const { Header, Content } = Layout;
@@ -21,14 +20,19 @@ function Chat({ collapsed, toggleCollapsed }) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { socket } = useSelector((state) => state.socket);
-  const { option } = useContext(HomeContext);
+  const { selectionSider } = useSelector((state) => state.chat);
   const handleSendingMsg = async (values) => {
     try {
       setLoading(true);
-      const data = await chatApi("send-msg", "post", values, option.key);
+      const data = await chatApi(
+        "send-msg",
+        "post",
+        values,
+        selectionSider.key
+      );
       socket.emit("message", {
         msg: values.msg,
-        chatId: option.key,
+        chatId: selectionSider.key,
         senderId: user.id,
         createdAt: new Date(),
       });
@@ -67,16 +71,15 @@ function Chat({ collapsed, toggleCollapsed }) {
           </div>
         </div>
       </Header>
-      {option ? (
+      {selectionSider ? (
         <Content className="content">
-          {/* Content area */}
           {loading ? (
             <div className="content-spin-container">
               <Spin size="large" className="content-spin" />
             </div>
           ) : (
             <>
-              <Messages option={option} lastMsg={lastMsg} />
+              <Messages lastMsg={lastMsg} />
               <Form className="send-container" onFinish={handleSendingMsg}>
                 <Form.Item
                   name="msg"

@@ -11,8 +11,6 @@ const AxiosInstance = axios.create({
 AxiosInstance.interceptors.request.use(
   (config) => {
     const token = getToken();
-    console.log('interceptor',token);
-
     if (token) {
       config.headers["authentication"] = `${token}`;
     }
