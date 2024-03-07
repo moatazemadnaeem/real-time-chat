@@ -4,11 +4,10 @@ import { useEffect, useState, useContext } from "react";
 import { TeamOutlined, UserOutlined, UserAddOutlined } from "@ant-design/icons";
 import ChatModal from "./chatModal";
 import { useNavigate } from "react-router-dom";
-import { SocketContext } from "../../store/socketStore/socketState";
-import { AppContext } from "../../store/appStore/appState";
 import OnlineUsers from "./onlineUsers";
 import { chatApi } from "../../services/api/chatApi";
 import { HomeContext } from "../../store/homeStore/appStore/homeState";
+import { useSelector } from "react-redux";
 const { Sider } = Layout;
 const { Search } = Input;
 function SideBar({ collapsed }) {
@@ -19,21 +18,21 @@ function SideBar({ collapsed }) {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const { socket } = useContext(SocketContext);
-  const { user } = useContext(AppContext);
-  const {option,setOption}=useContext(HomeContext)
+  const { socket } = useSelector((state) => state.socket);
+  const { user } = useSelector((state) => state.user);
+  const { option, setOption } = useContext(HomeContext);
   const showModal = () => {
     setIsModalOpen(true);
   };
   const fetchChatsByUser = async () => {
     try {
       setLoading(true);
-      const  data  = await chatApi("get-chats-by-user","get");
+      const data = await chatApi("get-chats-by-user", "get");
       setChats(data.chats);
     } catch (error) {
       if (error?.status === 401) {
         socket.close();
-        return navigate("/signin", { replace: true });
+        return navigate("/", { replace: true });
       }
       return message.error(
         error?.data?.msg || "Something went wrong please try again."

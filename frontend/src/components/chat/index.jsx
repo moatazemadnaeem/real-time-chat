@@ -7,24 +7,25 @@ import {
 } from "@ant-design/icons";
 import "./Chat.css";
 import Messages from "../messages";
-import { AppContext } from "../../store/appStore/appState";
-import { SocketContext } from "../../store/socketStore/socketState";
 import { useNavigate } from "react-router-dom";
 import { chatApi } from "../../services/api/chatApi";
 import { HomeContext } from "../../store/homeStore/appStore/homeState";
+import { useSelector, useDispatch } from "react-redux";
+import { logout_user } from "../../redux/features/user/createUserSlice";
 const { Header, Content } = Layout;
 
 function Chat({ collapsed, toggleCollapsed }) {
   const [loading, setLoading] = useState(false);
   const [lastMsg, setLastMsg] = useState(null);
   const navigate = useNavigate();
-  const { user } = useContext(AppContext);
-  const { socket } = useContext(SocketContext);
-  const {option}=useContext(HomeContext)
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+  const { socket } = useSelector((state) => state.socket);
+  const { option } = useContext(HomeContext);
   const handleSendingMsg = async (values) => {
     try {
       setLoading(true);
-      const  data  = await chatApi("send-msg","post",values,option.key);
+      const data = await chatApi("send-msg", "post", values, option.key);
       socket.emit("message", {
         msg: values.msg,
         chatId: option.key,
@@ -35,7 +36,7 @@ function Chat({ collapsed, toggleCollapsed }) {
     } catch (error) {
       if (error?.status === 401) {
         socket.close();
-        return navigate("/signin", { replace: true });
+        return navigate("/", { replace: true });
       }
       return message.error(
         error?.data?.msg || "Something went wrong please try again."
@@ -58,9 +59,9 @@ function Chat({ collapsed, toggleCollapsed }) {
             <LogoutOutlined
               className="logout"
               onClick={() => {
-                sessionStorage.setItem("jwt", null);
+                dispatch(logout_user());
                 socket.close();
-                navigate("/signin", { replace: true });
+                navigate("/", { replace: true });
               }}
             />
           </div>
