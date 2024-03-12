@@ -3,7 +3,7 @@ import { useAuth } from "../customHooks/userAuth";
 import { Navigate, Outlet } from "react-router-dom";
 import { Spin } from "antd";
 function ProtectRoute() {
-  const { user, loading } = useAuth();
+  const { user, loading, error } = useAuth();
   if (loading) {
     return (
       <div className="glob-spin">
@@ -11,10 +11,12 @@ function ProtectRoute() {
       </div>
     );
   }
-  if (!user) {
+  if (!user && error) {
     return <Navigate to="/" replace />;
   }
-  return <Outlet />;
+  if (user) {
+    return <Outlet />;
+  }
 }
 
 export default ProtectRoute;
