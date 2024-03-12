@@ -1,3 +1,4 @@
+// User Validations
 export const validateName = (_, value) => {
   if (!value || value.length < 3 || value.length > 255) {
     return Promise.reject(
@@ -19,6 +20,17 @@ export const validatePassword = (_, value) => {
   if (!value || value.length < 6 || value.length > 255) {
     return Promise.reject(
       new Error("Password must be between 6 and 255 characters")
+    );
+  }
+  return Promise.resolve();
+};
+//Chat Validations
+export const validateUsersInChat = (_, value, isGroup) => {
+  if (value && value.length > 1 && !isGroup) {
+    return Promise.reject(
+      new Error(
+        "Users in chat should be one only because you did not select group"
+      )
     );
   }
   return Promise.resolve();

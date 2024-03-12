@@ -4,6 +4,7 @@ import { AxiosInstance } from "../../axiosConfig/AxiosConfig";
 import { useNavigate } from "react-router-dom";
 import { chatApi } from "../../services/api/chatApi";
 import { useSelector } from "react-redux";
+import { validateUsersInChat } from "../../utils/validations";
 function ChatModal({ isModalOpen, setIsModalOpen }) {
   const [isGroup, setIsGroup] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -22,20 +23,11 @@ function ChatModal({ isModalOpen, setIsModalOpen }) {
     form.validateFields();
   };
 
-  const validateUsersInChat = (_, value) => {
-    if (value && value.length > 1 && !isGroup) {
-      return Promise.reject(
-        new Error(
-          "Users in chat should be one only because you did not select group"
-        )
-      );
-    }
-    return Promise.resolve();
-  };
   const handleSearch = async (value) => {
     try {
-      const response = await AxiosInstance.get(
-        `/users/search-users?email=${value}`
+      const response = await chatApi(
+        `/users/search-users?email=${value}`,
+        "get"
       );
       setSearchResults(response?.data?.usersFound || []);
     } catch (error) {
@@ -52,7 +44,7 @@ function ChatModal({ isModalOpen, setIsModalOpen }) {
     setSearchResults([]);
   };
 
-  const onFinish = async (values) => {
+  const handleCreateChat = async (values) => {
     try {
       setLoading(true);
       const data = await chatApi("create-chat", "post", values);
@@ -78,7 +70,7 @@ function ChatModal({ isModalOpen, setIsModalOpen }) {
       onCancel={handleCancel}
       footer={null} // Set footer to null to remove buttons
     >
-      <Form form={form} onFinish={onFinish} layout="vertical">
+      <Form form={form} onFinish={handleCreateChat} layout="vertical">
         {/* usersInChat */}
         <Form.Item
           name="usersInChat"
@@ -89,7 +81,7 @@ function ChatModal({ isModalOpen, setIsModalOpen }) {
               message: "Please Input Atleast One User",
             },
             {
-              validator: validateUsersInChat,
+              validator: (_, value) => validateUsersInChat(_, value, isGroup),
             },
           ]}
         >
