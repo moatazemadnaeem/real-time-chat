@@ -1,9 +1,9 @@
 import { AxiosInstance } from "../../axiosConfig/AxiosConfig";
-export const authApiCall = async (url, bodyData) => {
+export const authApiCall = async (url, method = "post", bodyData = {}) => {
   try {
-    const user = await AxiosInstance.post(`users/${url}`, bodyData);
-    if (user) {
-      return user;
+    const response = await AxiosInstance[method](`users/${url}`, bodyData);
+    if (response) {
+      return response;
     }
   } catch (error) {
     throw new Error(

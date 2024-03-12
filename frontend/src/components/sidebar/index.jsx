@@ -47,6 +47,13 @@ function SideBar({ collapsed }) {
   }, [isModalOpen]);
   useEffect(() => {
     if (socket) {
+      socket.on("chat", (data) => {
+        console.log("socket chat", data);
+      });
+    }
+  }, [socket]);
+  useEffect(() => {
+    if (socket) {
       socket.on("onlineUsers", (data) => {
         setOnlineUsers(data);
       });

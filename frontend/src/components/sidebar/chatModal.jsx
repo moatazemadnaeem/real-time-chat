@@ -1,7 +1,7 @@
 import { Modal, Form, Select, Switch, Button, message, Input } from "antd";
 import { useState } from "react";
-import { AxiosInstance } from "../../axiosConfig/AxiosConfig";
 import { useNavigate } from "react-router-dom";
+import { authApiCall } from "../../services/api/authApi";
 import { chatApi } from "../../services/api/chatApi";
 import { useSelector } from "react-redux";
 import { validateUsersInChat } from "../../utils/validations";
@@ -25,18 +25,15 @@ function ChatModal({ isModalOpen, setIsModalOpen }) {
 
   const handleSearch = async (value) => {
     try {
-      const response = await chatApi(
-        `/users/search-users?email=${value}`,
-        "get"
-      );
+      const response = await authApiCall(`search-users?email=${value}`, "get");
       setSearchResults(response?.data?.usersFound || []);
     } catch (error) {
       if (error?.response?.status === 401) {
         socket.close();
         return navigate("/", { replace: true });
       }
-      message.error(
-        error?.response?.data?.msg || "Something went wrong please try again."
+      return message.error(
+        error?.data?.msg || "Something went wrong please try again."
       );
     }
   };
@@ -49,6 +46,7 @@ function ChatModal({ isModalOpen, setIsModalOpen }) {
       setLoading(true);
       const data = await chatApi("create-chat", "post", values);
       message.success(data?.msg || "Done.");
+      socket.emit("chatCreated", data?.chat);
     } catch (error) {
       if (error?.status === 401) {
         socket.close();

@@ -10,7 +10,7 @@ const SignIn = () => {
   const handleSignInApi = async (values) => {
     setLoading(true);
     try {
-      const user = await authApiCall("signin", values);
+      const user = await authApiCall("signin", "post", values);
       setLoading(false);
       if (user) {
         sessionStorage.setItem("jwt", user.data.token);

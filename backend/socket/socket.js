@@ -51,6 +51,9 @@ io.on("connection", (socket) => {
   socket.on("message", (data) => {
     io.emit(data.chatId, data);
   });
+  socket.on("chatCreated", (data) => {
+    io.emit("chat", data);
+  });
   socket.on("disconnect", () => {
     console.log(`user is disconnected`);
     delete onlineUsers[userId];
