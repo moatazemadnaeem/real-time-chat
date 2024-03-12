@@ -1,6 +1,6 @@
 import { Layout, Input, Menu, message, Spin } from "antd";
 import "./Sider.css";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { TeamOutlined, UserOutlined, UserAddOutlined } from "@ant-design/icons";
 import ChatModal from "./chatModal";
 import { useNavigate } from "react-router-dom";

@@ -4,9 +4,6 @@ import { Navigate, Outlet } from "react-router-dom";
 import { Spin } from "antd";
 function ProtectRoute() {
   const { user, loading } = useAuth();
-  if (!loading && !user) {
-    return null;
-  }
   if (loading) {
     return (
       <div className="glob-spin">
@@ -14,7 +11,6 @@ function ProtectRoute() {
       </div>
     );
   }
-
   if (!user) {
     return <Navigate to="/" replace />;
   }
