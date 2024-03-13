@@ -27,7 +27,7 @@ function OnlineUsers({
       return Users.filter((userRecord) => userRecord._id !== user.id).map(
         (item, indx, array) => {
           return (
-            <div key={item._id} className={`user-modal`}>
+            <div key={item._id || item} className={`user-modal`}>
               <div
                 className={`modal-circle ${handleOnlineStatus(indx, array)}`}
               ></div>

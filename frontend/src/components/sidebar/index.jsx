@@ -43,12 +43,34 @@ function SideBar({ collapsed }) {
     }
   };
   useEffect(() => {
-    !isModalOpen && fetchChatsByUser();
-  }, [isModalOpen]);
+    fetchChatsByUser();
+  }, []);
+  const getChatName = (val) => {
+    if (val.isGroup) {
+      return val.chatName;
+    } else {
+      if (val.userId !== user.id) {
+        return val.chatCreatorName;
+      }
+      return val.chatName;
+    }
+  };
   useEffect(() => {
     if (socket) {
       socket.on("chat", (data) => {
-        console.log("socket chat", data);
+        let chatCreatorId = data.userId;
+        let existsInUsers = data.usersInChat.includes(user.id);
+        if (chatCreatorId === user.id || existsInUsers) {
+          setChats((prev) => {
+            let newChats = prev;
+            newChats = newChats.filter((c) => data._id !== c._id);
+            let newdata = {
+              ...data,
+              chatName: getChatName(data),
+            };
+            return [...newChats, newdata];
+          });
+        }
       });
     }
   }, [socket]);
@@ -75,9 +97,11 @@ function SideBar({ collapsed }) {
     chat.chatName.toLowerCase().includes(searchText.toLowerCase())
   );
   const handleOnlineStatus = (indx = 0) => {
+    const userThatYouChatWith =
+      chats[indx]?.usersInChat[0]._id || chats[indx]?.usersInChat[0];
     if (
       (user.id === chats[indx]?.userId &&
-        onlineUsers.includes(chats[indx]?.usersInChat[0]._id)) ||
+        onlineUsers.includes(userThatYouChatWith)) ||
       (user.id !== chats[indx]?.userId &&
         onlineUsers.includes(chats[indx]?.userId))
     ) {
