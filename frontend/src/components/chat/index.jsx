@@ -35,6 +35,7 @@ function Chat({ collapsed, toggleCollapsed }) {
         chatId: selectionSider.key,
         senderId: user.id,
         createdAt: new Date(),
+        _id: data.text._id,
       });
       setLastMsg(data?.text?.msg || null);
     } catch (error) {

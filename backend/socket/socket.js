@@ -49,7 +49,8 @@ io.on("connection", (socket) => {
   if (userId) onlineUsers[userId] = userId;
   io.emit("onlineUsers", Object.keys(onlineUsers));
   socket.on("message", (data) => {
-    io.emit(data.chatId, data);
+    console.log("message", data);
+    io.emit("msg-sent", data);
   });
   socket.on("chatCreated", (data) => {
     io.emit("chat", data);

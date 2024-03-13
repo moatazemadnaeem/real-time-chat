@@ -13,10 +13,12 @@ function Messages({ lastMsg }) {
   const navigate = useNavigate();
   const bottomEl = useRef(null);
   useEffect(() => {
-    socket.on(selectionSider.key, (data) => {
-      setMessages((prev) => [...prev, data]);
-    });
-  }, []);
+    if (socket) {
+      socket.on("msg-sent", (data) => {
+        setMessages((prev) => [...prev, data]);
+      });
+    }
+  }, [socket]);
   useEffect(() => {
     const fetchMessagesByChat = async () => {
       try {
@@ -38,7 +40,7 @@ function Messages({ lastMsg }) {
       }
     };
     fetchMessagesByChat();
-  }, [selectionSider, lastMsg]);
+  }, [selectionSider]);
   useEffect(() => {
     if (messages && messages.length > 0) {
       bottomEl?.current?.scrollIntoView({ behavior: "smooth" });

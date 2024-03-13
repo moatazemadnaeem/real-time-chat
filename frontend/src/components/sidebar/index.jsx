@@ -59,7 +59,12 @@ function SideBar({ collapsed }) {
     if (socket) {
       socket.on("chat", (data) => {
         let chatCreatorId = data.userId;
-        let existsInUsers = data.usersInChat.includes(user.id);
+        let existsInUsers = false;
+        for (let i = 0; i < data.usersInChat.length; i++) {
+          if (data.usersInChat[i]._id === user.id) {
+            existsInUsers = true;
+          }
+        }
         if (chatCreatorId === user.id || existsInUsers) {
           setChats((prev) => {
             let newChats = prev;
@@ -83,6 +88,7 @@ function SideBar({ collapsed }) {
   }, [socket]);
   const handleMenuSelect = (item) => {
     const chat = chats.filter((chat) => chat._id === item.key)[0];
+    console.log("selection", chat);
     dispatch(
       set_user({
         key: item.key,
