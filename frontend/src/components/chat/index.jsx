@@ -15,7 +15,6 @@ const { Header, Content } = Layout;
 
 function Chat({ collapsed, toggleCollapsed }) {
   const [loading, setLoading] = useState(false);
-  const [lastMsg, setLastMsg] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
@@ -37,7 +36,6 @@ function Chat({ collapsed, toggleCollapsed }) {
         createdAt: new Date(),
         _id: data.text._id,
       });
-      setLastMsg(data?.text?.msg || null);
     } catch (error) {
       if (error?.status === 401) {
         socket.close();
@@ -80,7 +78,7 @@ function Chat({ collapsed, toggleCollapsed }) {
             </div>
           ) : (
             <>
-              <Messages lastMsg={lastMsg} />
+              <Messages />
               <Form className="send-container" onFinish={handleSendingMsg}>
                 <Form.Item
                   name="msg"

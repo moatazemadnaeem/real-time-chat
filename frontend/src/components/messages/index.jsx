@@ -5,7 +5,7 @@ import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { chatApi } from "../../services/api/chatApi";
 import { useSelector } from "react-redux";
-function Messages({ lastMsg }) {
+function Messages() {
   const [messages, setMessages] = useState([]);
   const { user } = useSelector((state) => state.user);
   const { socket } = useSelector((state) => state.socket);
