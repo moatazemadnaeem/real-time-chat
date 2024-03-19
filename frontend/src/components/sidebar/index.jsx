@@ -25,10 +25,11 @@ function SideBar({ collapsed }) {
   const showModal = () => {
     setIsModalOpen(true);
   };
-  const fetchChatsByUser = async () => {
+  const fetchChatsByUser = async (controller) => {
     try {
+      const signal = controller.signal;
       setLoading(true);
-      const data = await chatApi("get-chats-by-user", "get");
+      const data = await chatApi("get-chats-by-user", "get",{signal});
       setChats(data.chats);
     } catch (error) {
       if (error?.status === 401) {
@@ -43,7 +44,9 @@ function SideBar({ collapsed }) {
     }
   };
   useEffect(() => {
-    fetchChatsByUser();
+    const controller = new AbortController();
+    fetchChatsByUser(controller);
+    return () => {controller.abort();};
   }, []);
   const getChatName = (val) => {
     if (val.isGroup) {
